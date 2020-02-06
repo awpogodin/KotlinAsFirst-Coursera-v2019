@@ -3,6 +3,9 @@
 package lesson2.task2
 
 import lesson1.task1.sqr
+import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.sqrt
 
 /**
  * Пример
@@ -48,7 +51,11 @@ fun daysInMonth(month: Int, year: Int): Int = TODO()
 fun circleInside(
     x1: Double, y1: Double, r1: Double,
     x2: Double, y2: Double, r2: Double
-): Boolean = TODO()
+): Boolean {
+    val d = sqrt(sqr(abs(x1 - x2)) + sqr(abs(y1 - y2)))
+
+    return d + r1 <= r2
+}
 
 /**
  * Средняя
@@ -59,4 +66,13 @@ fun circleInside(
  * кирпич 4 х 4 х 4 пройдёт через отверстие 4 х 4.
  * Вернуть true, если кирпич пройдёт
  */
-fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean = TODO()
+fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
+    val holeSquare = r * s
+    val brickSquare1 = a * b
+    val brickSquare2 = a * c
+    val brickSquare3 = b * c
+
+    return (brickSquare1 <= holeSquare) ||
+            (brickSquare2 <= holeSquare) ||
+            (brickSquare3 <= holeSquare)
+}
