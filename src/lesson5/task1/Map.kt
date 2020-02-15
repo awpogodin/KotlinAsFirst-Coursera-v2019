@@ -91,7 +91,20 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  *   buildGrades(mapOf("Марат" to 3, "Семён" to 5, "Михаил" to 5))
  *     -> mapOf(5 to listOf("Семён", "Михаил"), 3 to listOf("Марат"))
  */
-fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> = TODO()
+fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
+    val res = mutableMapOf<Int, List<String>>()
+    for (i in 1..5) {
+        if (grades.containsValue(i)) {
+            val students = mutableListOf<String>()
+            res[i] = students
+            grades.map {
+                if (it.value == i) students.add(it.key)
+            }
+        }
+    }
+
+    return res
+}
 
 /**
  * Простая
@@ -147,7 +160,13 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = TODO()
  *     mapOf("Emergency" to "911", "Police" to "02")
  *   ) -> mapOf("Emergency" to "112, 911", "Police" to "02")
  */
-fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> = TODO()
+fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
+    val res = mutableMapOf<String, String>()
+    mapA.map {
+        if (mapB.containsKey(it.key) && mapB[it.key] != it.value) res[it.key] = "${it.value}, ${mapB[it.key]}"
+    }
+    return mapA.plus(mapB).plus(res)
+}
 
 /**
  * Средняя
