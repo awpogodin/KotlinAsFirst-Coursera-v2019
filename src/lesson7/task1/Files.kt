@@ -70,7 +70,31 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
  *
  */
 fun sibilants(inputName: String, outputName: String) {
-    TODO()
+
+    val consonants = listOf("ж", "ш", "ч", "щ")
+    val vowels = mapOf("ы" to "и", "я" to "а", "ю" to "у")
+    val map = mutableMapOf<String, String>()
+
+    for (cons in consonants) {
+        for ((wrong, correct) in vowels) {
+            map[cons + wrong] = cons + correct
+            map[cons.toUpperCase() + wrong] = cons.toUpperCase() + correct
+            map[cons + wrong.toUpperCase()] = cons + correct.toUpperCase()
+            map[(cons + wrong).toUpperCase()] = (cons + correct).toUpperCase()
+        }
+    }
+
+    val outFile = File(outputName).bufferedWriter()
+
+    for (line in File(inputName).readLines()) {
+        var tmp = line
+        for ((key, value) in map) {
+            tmp = tmp.replace(key, value)
+        }
+        outFile.write(tmp)
+        outFile.newLine()
+    }
+    outFile.close()
 }
 
 /**
