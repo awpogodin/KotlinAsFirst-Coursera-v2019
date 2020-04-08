@@ -79,14 +79,17 @@ data class Circle(val center: Point, val radius: Double) {
      * расстояние между их центрами минус сумма их радиусов.
      * Расстояние между пересекающимися окружностями считать равным 0.0.
      */
-    fun distance(other: Circle): Double = TODO()
+    fun distance(other: Circle): Double {
+        val dist = center.distance(other.center) - (radius + other.radius)
+        return if (dist > 0.0) dist else 0.0
+    }
 
     /**
      * Тривиальная
      *
      * Вернуть true, если и только если окружность содержит данную точку НА себе или ВНУТРИ себя
      */
-    fun contains(p: Point): Boolean = TODO()
+    fun contains(p: Point): Boolean = p.distance(center) <= radius
 }
 
 /**
@@ -106,7 +109,23 @@ data class Segment(val begin: Point, val end: Point) {
  * Дано множество точек. Вернуть отрезок, соединяющий две наиболее удалённые из них.
  * Если в множестве менее двух точек, бросить IllegalArgumentException
  */
-fun diameter(vararg points: Point): Segment = TODO()
+fun diameter(vararg points: Point): Segment {
+    if (points.size < 2) throw IllegalArgumentException()
+    var max = points[0].distance(points[1])
+    var p1 = points[0]
+    var p2 = points[1]
+    for (i in 0..points.size - 2) {
+        for (k in i + 1 until points.size) {
+            val dist = points[i].distance(points[k])
+            if (dist >= max) {
+                max = dist
+                p1 = points[i]
+                p2 = points[k]
+            }
+        }
+    }
+    return Segment(p1, p2)
+}
 
 /**
  * Простая
@@ -114,7 +133,14 @@ fun diameter(vararg points: Point): Segment = TODO()
  * Построить окружность по её диаметру, заданному двумя точками
  * Центр её должен находиться посередине между точками, а радиус составлять половину расстояния между ними
  */
-fun circleByDiameter(diameter: Segment): Circle = TODO()
+fun circleByDiameter(diameter: Segment): Circle =
+    Circle(
+        Point(
+            (diameter.begin.x + diameter.end.x) / 2.0,
+            (diameter.begin.y + diameter.end.y) / 2.0
+        ),
+        diameter.begin.distance(other = diameter.end) / 2.0
+    )
 
 /**
  * Прямая, заданная точкой point и углом наклона angle (в радианах) по отношению к оси X.
